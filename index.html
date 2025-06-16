@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <title>BFSG-Quiz</title>
+  <style>
+    body { font-family: sans-serif; max-width: 600px; margin: auto; padding: 2rem; }
+    .question { display: none; }
+    .question.active { display: block; }
+    button { margin-top: 1rem; }
+  </style>
+</head>
+<body>
+
+  <h1>BFSG-Quiz</h1>
+  <div id="quiz-container"></div>
+  <div id="result" style="display:none;"></div>
+
+  <script>
+    const questions = [
+      {
+        question: "Wann tritt das BFSG in Kraft?",
+        options: ["28. Juni 2025", "1. Juli 2025", "15. März 2026"],
+        correct: 0
+      },
+      {
+        question: "Was verlangt das BFSG?",
+        options: ["Datenschutzkonformität", "Barrierefreie digitale Produkte", "Cloud-Speicherung"],
+        correct: 1
+      },
+      {
+        question: "Welche Produkte betrifft das BFSG?",
+        options: ["Nur Apps", "Nur Printprodukte", "Online-Shops, E-Books, Banking-Apps, Selbstbedienungsterminals"],
+        correct: 2
+      },
+       {
+        question: "Was muss beachtet werden?",
+        options: ["Alle Bilder müssen ALT-Texte haben", " Nur staatliche Behörden müssen das Gesetz umsetzen", "Nicht alle Bilder brauchen einen ALT-Text"],
+        correct: 0
+      },
+      {
+        question: "Was kann passieren, wenn das BFSG nicht eingehalten wird?",
+        options: ["Es gibt keine Folgen, da es nur eine Empfehlung ist", "Beschwerden und Bußgelder sind möglich", "Es wird automatisch auf barrierefrei umgestellt"],
+        correct: 1
+      },
+      {
+        question: "Was bedeutet digitale Barrierefreiheit im Sinne des BFSG?",
+        options: ["Alle Inhalte müssen auf Englisch übersetzt sein", "Inhalte müssen für Menschen mit Einschränkungen zugänglich und bedienbar sein", "Nur eine barrierefreie Startseite ist ausreichend"],
+        correct: 1
+      }
+    ];
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    const quizContainer = document.getElementById("quiz-container");
+    const resultContainer = document.getElementById("result");
+
+    function showQuestion(index) {
+      const q = questions[index];
+      quizContainer.innerHTML = `
+        <div class="question active">
+          <h2>Frage ${index + 1} von ${questions.length}</h2>
+          <p>${q.question}</p>
+          ${q.options.map((opt, i) => `
+            <button onclick="submitAnswer(${i})">${opt}</button>
+          `).join("<br>")}
+        </div>
+      `;
+    }
+
+    function submitAnswer(selected) {
+      if (selected === questions[currentQuestion].correct) {
+        score++;
+      }
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        showQuestion(currentQuestion);
+      } else {
+        showResult();
+      }
+    }
+
+    function showResult() {
+      quizContainer.style.display = "none";
+      let feedback = "";
+      if (score >= 3) {
+        feedback = "Du bist ein Experte! ✅";
+      } else if (score === 2) {
+        feedback = "Schon ziemlich gut – da steckt Know-how drin.";
+      } else {
+        feedback = "Da geht noch was – probier’s gleich nochmal! 🔄";
+      }
+      resultContainer.style.display = "block";
+      resultContainer.innerHTML = `<h2>Ergebnis</h2><p>Du hast ${score} von ${questions.length} Punkten erreicht.</p><p>${feedback}</p>`;
+    }
+
+    // Start the quiz
+    showQuestion(currentQuestion);
+  </script>
+
+</body>
+</html>
